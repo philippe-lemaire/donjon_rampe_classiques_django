@@ -32,12 +32,12 @@ def login_request(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.info(request, f"You are now logged in as {username}.")
+                messages.info(request, f"Bienvenue, {username}.")
                 return redirect("index")
             else:
-                messages.error(request, "Invalid username or password.")
+                messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
         else:
-            messages.error(request, "Invalid username or password.")
+            messages.error(request, "Nom d'utilisateur ou mot de passe invalide.")
     form = AuthenticationForm()
     return render(
         request=request,
