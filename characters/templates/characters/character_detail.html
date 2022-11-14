@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+
+{% block title %}
+Donjon Rampe Classiques | {{character.name}}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <table class="table table-striped" style="width: 400px">
+                <tr>
+                    <th colspan="2">{{character.name}}</th>
+                </tr>
+                <tr>
+                    <td>Sobriquet</td>
+                    <td>{{character.nickname}}</td>
+                </tr>
+                <tr>
+                    <td>Titre</td>
+                    <td>{{character.title}}</td>
+                </tr>
+                <tr>
+                    <td>Métier</td>
+                    <td>{{character.occupation}}</td>
+                </tr>
+                <tr>
+                    <td>Alignement</td>
+                    <td>{{character.alignment}}</td>
+                </tr>
+                <tr>
+                    <td>Signe de naissance</td>
+                    <td>{{character.birthsign}}</td>
+                </tr>
+                <tr>
+                    <td>Lancers chanceux</td>
+                    <td>{{character.birthsign_effect}}</td>
+                </tr>
+                <tr>
+                    <td>Langages connus</td>
+                    <td>{{character.languages}}</td>
+                </tr>
+            </table>
+
+            <table class="table table-striped" style="width: 400px">
+                <tr>
+                    <th colspan="2">Inventaire</th>
+                </tr>
+                <tr>
+
+                    <td colspan="2">{{character.inventory}}</td>
+                </tr>
+
+            </table>
+            {% if character.lucky_weapon %}
+            <table class="table table-striped" style="width: 400px">
+                <tr>
+                    <th colspan="2">Arme chanceuse</th>
+                </tr>
+                <tr>
+
+                    <td colspan="2">{{character.lucky_weapon}}</td>
+                </tr>
+
+            </table>
+            {% endif %}
+        </div>
+        <div class="col-xs-6"> </div>
+        <div class="col-xs-6">
+            <table class="table table-striped">
+                <tr>
+                    <th colspan="2">{{character.class_}}</th>
+                </tr>
+                <tr>
+                    <td>Niveau</td>
+                    <td>{{character.level}}</td>
+                </tr>
+                <tr>
+                    <td>❤️</td>
+                    <td>{{character.current_hp}} / {{character.hp}}</td>
+                </tr>
+                <tr>
+                    <td>🛡️</td>
+                    <td>{{character.ac}}</td>
+                </tr>
+                <tr>
+                    <td>Init</td>
+                    {% if character.class_ == "Guerrier" %}
+                    <td>{{character.init + character.level}}</td>
+                    {% else %}
+                    <td>{{character.init}}</td>
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td>Vitesse</td>
+                    <td>{{character.speed}}</td>
+                </tr>
+                <tr>
+                    <td>🎲 d’action</td>
+                    <td>{{level_bonuses.get(character.class_).get(character.level)[4]}}</td>
+                </tr>
+                {% if character.class_ == "Voleur" %}
+                <tr>
+                    <td>🎲 de chance</td>
+                    <td>{{luck_die.get(character.level)}}</td>
+                </tr>
+                {% endif %}
+
+            </table>
+
+        </div>
+        <div class="col-xs-6"> </div>
+        <div class="col-xs-6">
+            <table class="table table-striped" style="width: 250px">
+                <tr>
+                    <th scope="col">Caractéristique</th>
+                    <th scope="col">Valeur</th>
+                    <th scope="col">Mod</th>
+                </tr>
+                <tr>
+                    <td>Force</td>
+                    <td>{{character.strength}}</td>
+                    <td>{{mod[character.strength]}}</td>
+                </tr>
+                <tr>
+                    <td>Agilité</td>
+                    <td>{{character.agility}}</td>
+                    <td>{{mod[character.agility]}}</td>
+                </tr>
+                <tr>
+                    <td>Endurance</td>
+                    <td>{{character.stamina}}</td>
+                    <td>{{mod[character.stamina]}}</td>
+                </tr>
+                <tr>
+                    <td>Présence</td>
+                    <td>{{character.personality}}</td>
+                    <td>{{mod[character.personality]}}</td>
+                </tr>
+                <tr>
+                    <td>Intelligence</td>
+                    <td>{{character.intelligence}}</td>
+                    <td>{{mod[character.intelligence]}}</td>
+                </tr>
+                <tr>
+                    <td>Chance</td>
+                    <td>{{character.luck}}</td>
+                    <td>{{mod[character.luck]}}</td>
+                </tr>
+
+            </table>
+            {% if character.class_ == "Halfelin" %}
+            <table class="table table-striped" style="width: 250px">
+                <tr>
+                    <th colspan="2">Compétences</th>
+                </tr>
+                <tr>
+                    <td>Déplacement silencieux</td>
+                    <td>+{{halflin_skills.get(character.level)}}</td>
+                </tr>
+                <tr>
+                    <td>Se cacher dans l’ombre</td>
+                    <td>+{{halflin_skills.get(character.level)}}</td>
+                </tr>
+            </table>
+            {% endif%}
+            {% if character.class_ == "Voleur" %}
+            <table class="table table-striped" style="width: 250px">
+                <tr>
+                    <th colspan="2">Compétences</th>
+                </tr>
+                {% for skill in thieves_skills %}
+                <tr>
+                    <td>{{skill}}</td>
+                    <td>{{thieves_bonuses.get(character.alignment).get(character.level).get(skill)}}</td>
+                </tr>
+                {% endfor %}
+
+            </table>
+            <ul class="list-group">
+                <li class="list-group-item">* Ajouter modificateur d’Agilité
+                <li class="list-group-item">† Ajouter modificateur d’Intelligence</li>
+                <li class="list-group-item">‡ Ajouter modificateur de Présence</li>
+            </ul>
+            {% endif %}
+            {% if character.class_ == "Mage" or character.class_ == "Elfe" or character.class_ == "Clerc" %}
+            <table class="table table-striped" style="width: 250px">
+                <tr>
+                    <th>Sorts connus</th>
+
+                </tr>
+                <tr>
+                    <td>{{character.spells_known}}</td>
+                </tr>
+                {% if character.class_ == "Clerc" %}
+                <tr>
+                    <th>Divinité</th>
+
+                </tr>
+                <tr>
+                    <td>{{character.deity}}</td>
+                </tr>
+                {% endif %}
+
+            </table>
+            {% endif %}
+        </div>
+        <div class="col-xs-6"> </div>
+        <div class="col-xs-6">
+            <table class="table table-striped">
+                <tr>
+                    <th colspan="2">JdS</th>
+                </tr>
+                <tr>
+                    <td>Réflexes</td>
+                    <td>{{mod[character.agility] + level_bonuses[character.class_][character.level][0]}}</td>
+                </tr>
+                <tr>
+                    <td>Vigueur</td>
+                    <td>{{mod[character.stamina] + level_bonuses[character.class_][character.level][1]}}</td>
+                </tr>
+                <tr>
+                    <td>Volonté</td>
+                    <td>{{mod[character.personality] + level_bonuses[character.class_][character.level][2]}}</td>
+                </tr>
+
+                <tr>
+                    <th scope="col" colspan="2">Bonus</th>
+
+                </tr>
+
+                <tr>
+                    <td>🗡️</td>
+                    <td>{{mod[character.strength] + level_bonuses[character.class_][character.level][3]}}</td>
+                </tr>
+                <tr>
+                    <td>🏹</td>
+                    <td>{{mod[character.agility] + level_bonuses[character.class_][character.level][3]}}</td>
+                </tr>
+
+                {% if character.class_ == "Guerrier" or character.class_ == "Nain" %}
+                <tr>
+                    <td>🎲 HF</td>
+                    <td>{{mighty_deeds.get(character.class_).get(character.level)}}</td>
+                </tr>
+                {% endif %}
+
+                {% if character.class_ == "Mage" %}
+                <tr>
+                    <td>🪄</td>
+
+                    <td>{{character.level + mod[character.intelligence]}}</td>
+                </tr>
+                {% elif character.class_ == "Clerc" %}
+                <tr>
+                    <td>🙏</td>
+                    <td>{{character.level + mod[character.personality]}}</td>
+                </tr>
+                {% else %}
+
+                {% endif %}
+
+                </tr>
+            </table>
+            <table class="table table-striped">
+                <tr>
+                    <th colspan=" 2">Crits</th>
+                </tr>
+                <tr>
+                    <td>Dés</td>
+                    <td>{{level_bonuses.get(character.class_).get(character.level)[5]}}</td>
+                </tr>
+                <tr>
+                    <td>Table</td>
+                    <td>{{level_bonuses.get(character.class_).get(character.level)[6]}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<br>
+
+<a class="btn btn-secondary" role="button" href="{{url_for('main.edit_character', id=character.id)}}">📝 Modifier</a>
+
+<a class="btn btn-warning" role="button" href="{{url_for('main.level_up_character', id=character.id)}}">💪🏽
+    +1 Niveau</a>
+
+{% if character.dead %}
+
+<a class="btn btn-light" role="button" href="{{url_for('main.resurect_character', id=character.id)}}">🙏
+    Ressusciter</a>
+<a class="btn btn-dark" role="button" href="{{url_for('main.delete_character', id=character.id)}}">🗑️ Effacer</a>
+
+{% else %}
+<a class="btn btn-dark" role="button" href="{{url_for('main.delete_character', id=character.id)}}">⚰️ Tuer</a>
+
+{% endif %}
+
+
+
+{% endblock %}

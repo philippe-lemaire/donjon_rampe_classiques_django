@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}
+Donjon Rampe Classiques | Modifier mon compte
+{% endblock %}
+
+{% block content %}
+<h1>Modifier mon compte</h1>
+<br></br>
+
+
+{{ render_form(profileform) }}
+{% endblock %}
