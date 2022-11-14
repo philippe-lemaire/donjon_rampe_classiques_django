@@ -7,11 +7,8 @@ Donjon Rampe Classiques | Sorts de Mage
 {% block content %}
 <h1>Sorts de Mage</h1>
 
-
-
+{% for level, spell_list in spells.items %}
 <ul>
-    {% for level, spell_list in spells.items %}
-
     <li> Niveau {{ level }} : </li>
     <ul>
         {% for sp in spell_list %}

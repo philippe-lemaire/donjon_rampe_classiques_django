@@ -7,19 +7,15 @@ Donjon Rampe Classiques | Sorts de Clerc
 {% block content %}
 <h1>Sorts de Clerc</h1>
 
-<div class="container">
-    <div class="row">
-        {% for level in spells %}
-        <div class="col">
-            <h3>Niveau {{level}}</h3>
-            <ol>
-                {% for spell in spells[level] %}
-                <li>{{spell}}</li>
-                {% endfor %}
-            </ol>
-        </div>
+{% for level, spell_list in spells.items %}
+<ul>
+    <li> Niveau {{ level }} : </li>
+    <ul>
+        {% for sp in spell_list %}
+        <li> {{ sp }} </li>
         {% endfor %}
-    </div>
-</div>
+    </ul>
+</ul>
+{% endfor %}
 
 {% endblock %}
