@@ -14,6 +14,8 @@ import environ
 
 from pathlib import Path
 
+# from simple_auth.views import login_request
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -144,3 +146,6 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # for crispy forms
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+
+# LOGIN URL
+LOGIN_URL = "/authentification/identification"

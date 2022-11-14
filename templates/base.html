@@ -32,8 +32,9 @@
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Personnages</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
 
-                            <a class="dropdown-item" href="#">Créer un personnage</a>
-                            <a class="dropdown-item" href="#">Mes personnages</a>
+                            <a class="dropdown-item" href="{% url 'characters:create_character' %}">Créer un
+                                personnage</a>
+                            <a class="dropdown-item" href="{% url 'characters:my_characters' %}">Mes personnages</a>
                             <a class="dropdown-item" href="#">Cimetière</a>
                         </div>
                     </li>

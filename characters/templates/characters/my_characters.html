@@ -26,20 +26,20 @@ Donjon Rampe Classiques | Mes personnages
         {% for char in characters %}
         <tr>
             <th scope="row">{{ loop.index }}</th>
-            <td><a href="{{url_for('main.character_detail', id=char.id)}}">{{char.name}}</a></td>
+            <td><a href="#">{{char.name}}</a></td>
             <td>{{char.alignment}}</td>
             <td>{{char.class_}}</td>
             <td>{{char.level}}</td>
             <td>{{char.hp}}</td>
             <td>{{char.occupation}}</td>
-            <td>{{ moment(char.last_updated).fromNow(refresh=True) }}</td>
-            <td><a href="{{url_for('main.edit_character', id=char.id)}}">📝</a></td>
-            <td><a class='danger' href="{{url_for('main.delete_character', id=char.id)}}">⚰️</a></td>
+            <td></td>
+            <td><a href="#">📝</a></td>
+            <td><a class='danger' href="#">⚰️</a></td>
         </tr>
         {% endfor %}
 
     </tbody>
 </table>
 
-<a class="btn btn-primary" role="button" href="{{url_for('main.create_character')}}">Créer un autre personnage</a>
+<a class="btn btn-primary" role="button" href="{% url 'characters:create_character' %}">Créer un autre personnage</a>
 {% endblock %}
