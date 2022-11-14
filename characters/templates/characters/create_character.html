@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load crispy_forms_tags %}
 
 {% block title %}
 Donjon Rampe Classiques | Créer un personnage
@@ -17,5 +17,11 @@ Donjon Rampe Classiques | Créer un personnage
 </nav>
 <br>
 <p>Vue qui crée un personnage.</p>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Créer</button>
+</form>
 
 {% endblock %}
