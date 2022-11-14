@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+Donjon Rampe Classiques | Sorts de Mage
+{% endblock %}
+
+{% block content %}
+<h1>Sorts de Mage</h1>
+
+
+
+<ul>
+    {% for level, spell_list in spells.items %}
+
+    <li> Niveau {{ level }} : </li>
+    <ul>
+        {% for sp in spell_list %}
+        <li> {{ sp }} </li>
+        {% endfor %}
+    </ul>
+</ul>
+{% endfor %}
+
+{% endblock %}
