@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "characters",
     "game_data",
+    "crispy_forms",
 ]
 
 MIDDLEWARE = [
