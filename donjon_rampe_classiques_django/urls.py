@@ -18,13 +18,11 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 from django.conf import settings
 from django.conf.urls.static import static
-from .views import register, login_request, logout_request
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", TemplateView.as_view(template_name="index.html"), name="index"),
+    path("auth/", include("simple_auth.urls")),
     path("game_data/", include("game_data.urls")),
-    path("auth/register", register, name="register"),
-    path("auth/login", login_request, name="login"),
-    path("auth/logout", logout_request, name="logout"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

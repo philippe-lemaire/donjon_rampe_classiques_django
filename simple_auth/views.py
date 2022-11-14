@@ -18,7 +18,7 @@ def register(request):
 
     return render(
         request=request,
-        template_name="register.html",
+        template_name="simple_auth/register.html",
         context={"register_form": form},
     )
 
@@ -40,7 +40,9 @@ def login_request(request):
             messages.error(request, "Invalid username or password.")
     form = AuthenticationForm()
     return render(
-        request=request, template_name="login.html", context={"login_form": form}
+        request=request,
+        template_name="simple_auth/login.html",
+        context={"login_form": form},
     )
 
 
