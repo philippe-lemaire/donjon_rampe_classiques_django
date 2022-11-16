@@ -4,8 +4,9 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib import messages
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .models import Character
 from .forms import CharacterCreationForm
@@ -14,6 +15,18 @@ from .occupations import occupations
 from .equipment import equipment
 from game_data.utils import threedsix, ability_modifiers
 from .birthsigns import birthsigns
+from .class_bonuses import (
+    level_bonuses,
+    mighty_deeds,
+    halflin_skills,
+    thieves_bonuses,
+    thieves_skills,
+    luck_die,
+)
+from .random_names import random_names
+from .titles import titles
+from .equipment import equipment
+from game_data.spells import wizard_spells, cleric_spells
 
 
 @login_required
@@ -91,7 +104,29 @@ def create_character(request):
     return render(request, "characters/create_character.html", context)
 
 
-@login_required
-def my_characters(request):
-    """dummy view for now. Move to a generic view with additional filter on characters I own?"""
-    return render(request, "characters/my_characters.html", context={"characters": []})
+class my_characters(ListView, LoginRequiredMixin):
+    model = Character
+    paginate_by = 10  # if pagination is desired
+    template_name = "characters/my_characters.html"
+    context_object_name = "characters"
+
+    def get_queryset(self):
+        return Character.objects.filter(user=self.request.user)
+
+
+class character_detail(DetailView, LoginRequiredMixin):
+    model = Character
+    template_name = "characters/character_detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["mod"] = ability_modifiers
+        context["level_bonuses"] = level_bonuses
+        context["mighty_deeds"] = mighty_deeds
+        context["titles"] = titles
+        context["halflin_skills"] = halflin_skills
+        context["thieves_bonuses"] = thieves_bonuses
+        context["thieves_skills"] = thieves_skills
+        context["luck_die"] = luck_die
+
+        return context

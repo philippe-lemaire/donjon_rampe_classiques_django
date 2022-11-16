@@ -26,7 +26,7 @@ Donjon Rampe Classiques | Mes personnages
         {% for char in characters %}
         <tr>
             <th scope="row">{{ loop.index }}</th>
-            <td><a href="#">{{char.name}}</a></td>
+            <td><a href="{% url 'characters:character_detail' char.pk %}">{{char.name}}</a></td>
             <td>{{char.alignment}}</td>
             <td>{{char.class_}}</td>
             <td>{{char.level}}</td>

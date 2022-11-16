@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load character_extras %}
 
 {% block title %}
 Donjon Rampe Classiques | {{character.name}}
@@ -70,7 +71,7 @@ Donjon Rampe Classiques | {{character.name}}
         <div class="col-xs-6">
             <table class="table table-striped">
                 <tr>
-                    <th colspan="2">{{character.class_}}</th>
+                    <th colspan="2">{{character.classe}}</th>
                 </tr>
                 <tr>
                     <td>Niveau</td>
@@ -86,8 +87,8 @@ Donjon Rampe Classiques | {{character.name}}
                 </tr>
                 <tr>
                     <td>Init</td>
-                    {% if character.class_ == "Guerrier" %}
-                    <td>{{character.init + character.level}}</td>
+                    {% if character.classe == "Guerrier" %}
+                    <td>{{character.init|add:character.level}}</td>
                     {% else %}
                     <td>{{character.init}}</td>
                     {% endif %}
@@ -98,12 +99,12 @@ Donjon Rampe Classiques | {{character.name}}
                 </tr>
                 <tr>
                     <td>🎲 d’action</td>
-                    <td>{{level_bonuses.get(character.class_).get(character.level)[4]}}</td>
+                    <td>{{level_bonuses|get_item:character.classe|get_item:character.level|get_item:4}}</td>
                 </tr>
-                {% if character.class_ == "Voleur" %}
+                {% if character.classe == "Voleur" %}
                 <tr>
                     <td>🎲 de chance</td>
-                    <td>{{luck_die.get(character.level)}}</td>
+                    <td>{{luck_die|get_item:character.level}}</td>
                 </tr>
                 {% endif %}
 
@@ -121,51 +122,51 @@ Donjon Rampe Classiques | {{character.name}}
                 <tr>
                     <td>Force</td>
                     <td>{{character.strength}}</td>
-                    <td>{{mod[character.strength]}}</td>
+                    <td>{{mod|get_item:character.strength}}</td>
                 </tr>
                 <tr>
                     <td>Agilité</td>
                     <td>{{character.agility}}</td>
-                    <td>{{mod[character.agility]}}</td>
+                    <td>{{mod|get_item:character.agility}}</td>
                 </tr>
                 <tr>
                     <td>Endurance</td>
                     <td>{{character.stamina}}</td>
-                    <td>{{mod[character.stamina]}}</td>
+                    <td>{{mod|get_item:character.stamina}}</td>
                 </tr>
                 <tr>
                     <td>Présence</td>
                     <td>{{character.personality}}</td>
-                    <td>{{mod[character.personality]}}</td>
+                    <td>{{mod|get_item:character.personality}}</td>
                 </tr>
                 <tr>
                     <td>Intelligence</td>
                     <td>{{character.intelligence}}</td>
-                    <td>{{mod[character.intelligence]}}</td>
+                    <td>{{mod|get_item:character.intelligence}}</td>
                 </tr>
                 <tr>
                     <td>Chance</td>
                     <td>{{character.luck}}</td>
-                    <td>{{mod[character.luck]}}</td>
+                    <td>{{mod|get_item:character.luck}}</td>
                 </tr>
 
             </table>
-            {% if character.class_ == "Halfelin" %}
+            {% if character.classe == "Halfelin" %}
             <table class="table table-striped" style="width: 250px">
                 <tr>
                     <th colspan="2">Compétences</th>
                 </tr>
                 <tr>
                     <td>Déplacement silencieux</td>
-                    <td>+{{halflin_skills.get(character.level)}}</td>
+                    <td>+{{halflin_skills|get_item:character.level}}</td>
                 </tr>
                 <tr>
                     <td>Se cacher dans l’ombre</td>
-                    <td>+{{halflin_skills.get(character.level)}}</td>
+                    <td>+{{halflin_skills|get_item:character.level}}</td>
                 </tr>
             </table>
             {% endif%}
-            {% if character.class_ == "Voleur" %}
+            {% if character.classe == "Voleur" %}
             <table class="table table-striped" style="width: 250px">
                 <tr>
                     <th colspan="2">Compétences</th>
@@ -173,7 +174,7 @@ Donjon Rampe Classiques | {{character.name}}
                 {% for skill in thieves_skills %}
                 <tr>
                     <td>{{skill}}</td>
-                    <td>{{thieves_bonuses.get(character.alignment).get(character.level).get(skill)}}</td>
+                    <td>{{thieves_bonuses|get_item:character.alignment|get_item:character.level|get_item:skill}}</td>
                 </tr>
                 {% endfor %}
 
@@ -184,7 +185,7 @@ Donjon Rampe Classiques | {{character.name}}
                 <li class="list-group-item">‡ Ajouter modificateur de Présence</li>
             </ul>
             {% endif %}
-            {% if character.class_ == "Mage" or character.class_ == "Elfe" or character.class_ == "Clerc" %}
+            {% if character.classe == "Mage" or character.classe == "Elfe" or character.classe == "Clerc" %}
             <table class="table table-striped" style="width: 250px">
                 <tr>
                     <th>Sorts connus</th>
@@ -193,7 +194,7 @@ Donjon Rampe Classiques | {{character.name}}
                 <tr>
                     <td>{{character.spells_known}}</td>
                 </tr>
-                {% if character.class_ == "Clerc" %}
+                {% if character.classe == "Clerc" %}
                 <tr>
                     <th>Divinité</th>
 
@@ -214,15 +215,22 @@ Donjon Rampe Classiques | {{character.name}}
                 </tr>
                 <tr>
                     <td>Réflexes</td>
-                    <td>{{mod[character.agility] + level_bonuses[character.class_][character.level][0]}}</td>
+                    <td>{{mod|get_item:character.agility}} +
+                        {{level_bonuses|get_item:character.classe|get_item:character.level|get_item:0}}
+
+                    </td>
                 </tr>
                 <tr>
                     <td>Vigueur</td>
-                    <td>{{mod[character.stamina] + level_bonuses[character.class_][character.level][1]}}</td>
+                    <td>{{mod|get_item:character.stamina}} +
+                        {{level_bonuses|get_item:character.classe|get_item:character.level|get_item:1}}
+                    </td>
                 </tr>
                 <tr>
                     <td>Volonté</td>
-                    <td>{{mod[character.personality] + level_bonuses[character.class_][character.level][2]}}</td>
+                    <td>{{mod|get_item:character.personality}} +
+                        {{level_bonuses|get_item:character.classe|get_item:character.level|get_item:2}}
+                    </td>
                 </tr>
 
                 <tr>
@@ -232,30 +240,34 @@ Donjon Rampe Classiques | {{character.name}}
 
                 <tr>
                     <td>🗡️</td>
-                    <td>{{mod[character.strength] + level_bonuses[character.class_][character.level][3]}}</td>
+                    <td>{{mod|get_item:character.strength}} +
+                        {{level_bonuses|get_item:character.classe|get_item:character.level|get_item:3}}
+                    </td>
                 </tr>
                 <tr>
                     <td>🏹</td>
-                    <td>{{mod[character.agility] + level_bonuses[character.class_][character.level][3]}}</td>
+                    <td>{{mod|get_item:character.agility}} +
+                        {{level_bonuses|get_item:character.classe|get_item:character.level|get_item:3}}
+                    </td>
                 </tr>
 
-                {% if character.class_ == "Guerrier" or character.class_ == "Nain" %}
+                {% if character.classe == "Guerrier" or character.classe == "Nain" %}
                 <tr>
                     <td>🎲 HF</td>
-                    <td>{{mighty_deeds.get(character.class_).get(character.level)}}</td>
+                    <td>{{mighty_deeds|get_item:character.classe|get_item:character.level}}</td>
                 </tr>
                 {% endif %}
 
-                {% if character.class_ == "Mage" %}
+                {% if character.classe == "Mage" %}
                 <tr>
                     <td>🪄</td>
 
-                    <td>{{character.level + mod[character.intelligence]}}</td>
+                    <td>{{character.level|add:mod|get_item:character.intelligence}}</td>
                 </tr>
-                {% elif character.class_ == "Clerc" %}
+                {% elif character.classe == "Clerc" %}
                 <tr>
                     <td>🙏</td>
-                    <td>{{character.level + mod[character.personality]}}</td>
+                    <td>{{character.level|add:mod|get_item:character.personality}}</td>
                 </tr>
                 {% else %}
 
@@ -269,11 +281,11 @@ Donjon Rampe Classiques | {{character.name}}
                 </tr>
                 <tr>
                     <td>Dés</td>
-                    <td>{{level_bonuses.get(character.class_).get(character.level)[5]}}</td>
+                    <td>{{level_bonuses|get_item:character.classe|get_item:character.level|get_item:5}}</td>
                 </tr>
                 <tr>
                     <td>Table</td>
-                    <td>{{level_bonuses.get(character.class_).get(character.level)[6]}}</td>
+                    <td>{{level_bonuses|get_item:character.classe|get_item:character.level|get_item:6}}</td>
                 </tr>
             </table>
         </div>
@@ -283,19 +295,19 @@ Donjon Rampe Classiques | {{character.name}}
 
 <br>
 
-<a class="btn btn-secondary" role="button" href="{{url_for('main.edit_character', id=character.id)}}">📝 Modifier</a>
+<a class="btn btn-secondary" role="button" href="#">📝 Modifier</a>
 
-<a class="btn btn-warning" role="button" href="{{url_for('main.level_up_character', id=character.id)}}">💪🏽
+<a class="btn btn-warning" role="button" href="#">💪🏽
     +1 Niveau</a>
 
 {% if character.dead %}
 
-<a class="btn btn-light" role="button" href="{{url_for('main.resurect_character', id=character.id)}}">🙏
+<a class="btn btn-light" role="button" href="#">🙏
     Ressusciter</a>
-<a class="btn btn-dark" role="button" href="{{url_for('main.delete_character', id=character.id)}}">🗑️ Effacer</a>
+<a class="btn btn-dark" role="button" href="#">🗑️ Effacer</a>
 
 {% else %}
-<a class="btn btn-dark" role="button" href="{{url_for('main.delete_character', id=character.id)}}">⚰️ Tuer</a>
+<a class="btn btn-dark" role="button" href="#">⚰️ Tuer</a>
 
 {% endif %}
 
