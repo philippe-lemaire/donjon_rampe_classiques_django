@@ -10,6 +10,7 @@ from django.views.generic import ListView, DetailView
 
 from .models import Character
 from .forms import CharacterCreationForm
+from donjon_rampe_classiques_django.settings import LOGIN_URL
 
 from .occupations import occupations
 from .equipment import equipment
@@ -104,17 +105,19 @@ def create_character(request):
     return render(request, "characters/create_character.html", context)
 
 
-class my_characters(ListView, LoginRequiredMixin):
+class my_characters(LoginRequiredMixin, ListView):
     model = Character
     paginate_by = 10  # if pagination is desired
     template_name = "characters/my_characters.html"
     context_object_name = "characters"
 
+    # redirect_field_name = "personnages/mes_personnages"
+
     def get_queryset(self):
         return Character.objects.filter(user=self.request.user)
 
 
-class character_detail(DetailView, LoginRequiredMixin):
+class character_detail(LoginRequiredMixin, DetailView):
     model = Character
     template_name = "characters/character_detail.html"
 
